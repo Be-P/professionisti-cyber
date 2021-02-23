@@ -1,0 +1,23 @@
+{
+  "name": "professionisti-cyber",
+  "version": "1.0.0",
+  "description": "Una piattaforma per professionisti di cybersecurity italiani",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Be-P/professionisti-cyber.git"
+  },
+  "keywords": [
+    "cybersecurity"
+  ],
+  "author": "Be-P",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Be-P/professionisti-cyber/issues"
+  },
+  "homepage": "https://github.com/Be-P/professionisti-cyber#readme"
+}
