@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/Be-P/professionisti-cyber/issues"
   },
-  "homepage": "https://github.com/Be-P/professionisti-cyber#readme"
+  "homepage": "https://github.com/Be-P/professionisti-cyber#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "passport": "^0.4.1",
+    "passport-linkedin-oauth2": "^2.0.0"
+  }
 }
