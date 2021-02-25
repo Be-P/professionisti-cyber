@@ -2,10 +2,10 @@
   "name": "professionisti-cyber",
   "version": "1.0.0",
   "description": "Una piattaforma per professionisti di cybersecurity italiani",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "jest --debug",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,8 @@
     "mongodb": "^3.6.4",
     "passport": "^0.4.1",
     "passport-linkedin-oauth2": "^2.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
