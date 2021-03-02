@@ -1,43 +1,18 @@
 const express = require('express');
 const app = express();
-const session = require('express-session');
-const passport = require('passport');
-const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
-const routes = require('./routes.js');
+const dbConnectionMw = require("./module/db-connection-mw.js");
+const dbConnectionCheckMw = require("./module/db-connection-check-mw.js");
+const passportStrategy = require("./module/passport-strategy.js");
+const authenticatedRoutes = require("./module/authenticated-routes.js");
+const routes = require("./module/routes.js");
 
-app.set('view engine', 'ejs');
+app.use(dbConnectionMw);         // This middleware will inject the mutation service into the express app
+app.use(dbConnectionCheckMw);    // This middleware will return a 500 error if the connection with the database has failed
+app.use(passportStrategy);       // Use passport strategy to ensure user authentication
+app.use(authenticatedRoutes);    // These are all the authenticated routes
+app.use(routes);                 // These are all the un-authenticated routes
 
-app.use(session({
-  resave: false,
-  saveUninitialized: true,
-  secret: 'SECRET'
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user);
-});
-
-passport.deserializeUser(function (obj, cb) {
-  cb(null, obj);
-});
-
-console.log("******* CLIENT ID",process.env.ID);
-passport.use(new LinkedInStrategy({
-  clientID: process.env.ID,
-  clientSecret: process.env.KEY,
-  callbackURL: 'http://127.0.0.1:3000/auth/linkedin/callback',
-  scope: ['r_emailaddress', 'r_liteprofile'],
-}, function (token, tokenSecret, profile, done) {
-  return done(null, profile);
-}
-));
-
-app.use('/', routes);
-
-const port = 3000;
+const port = 8080;
 
 app.listen(port, () => {
   console.log('App listening on port ' + port);
