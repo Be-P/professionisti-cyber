@@ -1,16 +1,18 @@
 const express = require('express');
 const app = express();
-const dbConnectionMw = require("./module/db-connection-mw.js");
-const dbConnectionCheckMw = require("./module/db-connection-check-mw.js");
-const passportStrategy = require("./module/passport-strategy.js");
-const authenticatedRoutes = require("./module/authenticated-routes.js");
-const routes = require("./module/routes.js");
+const dbConnectionMw = require("./module/db-connection-mw.js")(app);
+const passportStrategy = require("./module/passport-strategy.js")(app);
+const authenticatedRoutes = require("./module/authenticated-routes.js")(app);
+const routes = require("./module/routes.js")(app);
+const dbService = require("./module/db-service.js")(app);
 
-app.use(dbConnectionMw);         // This middleware will inject the mutation service into the express app
-app.use(dbConnectionCheckMw);    // This middleware will return a 500 error if the connection with the database has failed
+app.use(dbConnectionMw);         // This middleware will inject the database connection into the express app
+app.use(dbService);              // This middleware will inject the mutation service into the express app
 app.use(passportStrategy);       // Use passport strategy to ensure user authentication
 app.use(authenticatedRoutes);    // These are all the authenticated routes
 app.use(routes);                 // These are all the un-authenticated routes
+
+app.use(express.static('public'));
 
 const port = 8080;
 
