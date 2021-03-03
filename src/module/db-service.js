@@ -32,6 +32,14 @@ class MongoDbService {
     await this.db.collection("pentester-info").insertOne(obj);
   }
 
+  // Get Pentester general information from the database
+  async getPentesterInfo(pentesterId){
+    if (typeof(pentesterId)!=='string') throw new Error("pentesterId has to be a string");
+    const pentesters = await this.db.collection("pentester-info").find({ pentesterId}).toArray();
+    if(pentesters.length<=0) throw new Error("pentester not found");
+    if(pentesters.length>1) console.warn("More than one pentester found, lost data integrity");
+    return pentesters[0];
+  }
 }
 
 module.exports = (app) => async function(req,res,next) {
