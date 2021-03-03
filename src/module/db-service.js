@@ -1,12 +1,3 @@
-function addOffer(db,obj){
-  db.collection("customers").insertOne(obj, function(err, res) {});
-
-  console.log("get objects");
-  db.collection("customers").find({}).toArray(function(err, result) {
-    console.log(result);
-  });
-
-}
 class MongoDbService {
   constructor(mongodb) {
     this.db = mongodb;
@@ -14,7 +5,6 @@ class MongoDbService {
 
   // Add a pentester offer to the database
   async addPentesterOffer(pentesterId,offerTitle,offerDescription,offerPrice){
-
     const obj = {
       pentesterId,
       offerTitle,
@@ -25,9 +15,23 @@ class MongoDbService {
     await this.db.collection("pentester-offers").insertOne(obj);
   }
 
+  // Search a list of pentester offers from the database
   async getPentesterOfferList(filter){
     return await this.db.collection("pentester-offers").find(filter).toArray(); 
   }
+
+  // Add Pentester general information to the database
+  async addPentesterInfo(pentesterId, pentesterName, pentesterLinkedinId, pentesterLinkedinUrl, pentesterLinkedinImage){
+    const obj = {
+      pentesterId,
+      pentesterName,
+      pentesterLinkedinId,
+      pentesterLinkedinUrl,
+      pentesterLinkedinImage
+    }
+    await this.db.collection("pentester-info").insertOne(obj);
+  }
+
 }
 
 module.exports = (app) => async function(req,res,next) {
@@ -37,10 +41,9 @@ module.exports = (app) => async function(req,res,next) {
   if ( app.get("service")===undefined ){
     app.set("service", new MongoDbService(mongodb));
   }
-  
-  await app.get("service").addPentesterOffer("pid","title","descr","price");
-  const list = await app.get("service").getPentesterOfferList({});
-  console.log("list",list);
+
+  // await app.get('service').addPentesterOffer("id","title","descr","price");
+
   next();
 
 }
