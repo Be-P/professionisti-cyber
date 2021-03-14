@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  mongo:
+    image: "bitnami/mongodb:latest"
+    ports:
+      - "27017:27017"
+  backend:
+    image: "professionisti-cyber:latest"
+    environment:
+      - MONGO_HOST=mongo
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mongo"
