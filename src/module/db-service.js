@@ -1,18 +1,30 @@
+const ObjectId = require("mongodb").ObjectId
+
 class MongoDbService {
   constructor(mongodb) {
     this.db = mongodb;
   }
 
-  // Add a pentester offer to the database
-  async addPentesterOffer(pentesterId,offerTitle,offerDescription,offerPrice){
+  // Upsert a pentester offer to the database
+  async upsertPentesterOffer(offerId,pentesterId,offerTitle,offerDescription,offerPrice){
+    if( offerId === undefined ) {
+      offerId = ObjectId()
+    }
+
     const obj = {
+      _id: offerId,
       pentesterId,
       offerTitle,
       offerDescription,
       offerPrice
     }
     
-    await this.db.collection("pentester-offers").insertOne(obj);
+    const query = {
+      'pentesterId': { $eq: pentesterId},
+      '_id': { $eq: offerId }
+    };
+    
+    return await this.db.collection("pentester-offers").updateOne(query,{$set:obj},{upsert:true});
   }
 
   // Search a list of pentester offers from the database
@@ -29,7 +41,8 @@ class MongoDbService {
       pentesterLinkedinUrl,
       pentesterLinkedinImage
     }
-    await this.db.collection("pentester-info").insertOne(obj);
+    return await this.db.collection("pentester-info").insertOne(obj);
+    
   }
 
   // Get Pentester general information from the database
@@ -50,10 +63,7 @@ module.exports = (app) => async function(req,res,next) {
     app.set("service", new MongoDbService(mongodb));
   }
 
-  // await app.get('service').addPentesterOffer("id","title","descr","price");
-
   next();
-
 }
 
 

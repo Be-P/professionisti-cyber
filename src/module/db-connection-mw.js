@@ -5,8 +5,10 @@ const config = require("../config.js");
 async function addUniqueIndexes(mongodb){
   
   await mongodb.collection("pentester-offers").createIndex( { offerTitle:1, pentesterId:1 }, {unique:true });
+  await mongodb.collection("pentester-offers").createIndex( { _id:1 }, {unique:true });
   await mongodb.collection("pentester-info").createIndex( { pentesterId:1}, {unique:true });
   await mongodb.collection("pentester-info").createIndex( { pentesterLinkedinId:1}, {unique:true });
+  await mongodb.collection("pentester-info").createIndex( { _id:1}, {unique:true });
 
 }
 

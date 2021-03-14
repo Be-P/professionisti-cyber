@@ -25,6 +25,21 @@ function configureApp(app,req,res,next) {
     req.logout();
     res.redirect("/");
   });
+  
+  authenticatedRouter.post("/upsertOffer",async (req,res)=>{
+    try {
+      const result = await app.get('service').upsertPentesterOffer(req.body.offerId,req.user.id,req.body.title,req.body.description,req.body.price);
+      res.json(result).end();
+    } catch(e){
+      res.status(500).json(e).end();
+    }
+
+  });
+
+  authenticatedRouter.get("/getOffers",async (req,res)=>{
+    const result = await app.get('service').getPentesterOfferList({});
+    res.json(result).end();
+  });
 
   app.use("/authenticated",checkAuthentication, authenticatedRouter);
   app.set("authenticatedRoutes",true);
