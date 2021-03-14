@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const app = express();
 const dbConnectionMw = require("./module/db-connection-mw.js")(app);
