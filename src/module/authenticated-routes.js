@@ -21,8 +21,12 @@ function configureApp(app,req,res,next) {
     res.json(req.user).end();
   });
 
+  authenticatedRouter.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect("/");
+  });
+
   app.use("/authenticated",checkAuthentication, authenticatedRouter);
-  
   app.set("authenticatedRoutes",true);
 }
 
